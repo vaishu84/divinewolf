@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catering – Salt Water Grill</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET ===== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:"Open Sans", sans-serif;
+}
+
+/* ===== BACKGROUND WITH BLUR ===== */
+.catering-bg{
+  min-height:100vh;
+  background:url("https://images.unsplash.com/photo-1551218808-94e220e084d2") center/cover no-repeat;
+  position:relative;
+}
+
+.catering-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(6px);
+}
+
+/* ===== WRAPPER ===== */
+.catering-wrapper{
+  position:relative;
+  z-index:2;
+  padding:80px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* ===== HEADING ===== */
+.catering-wrapper h1{
+  font-family:"Playfair Display", serif;
+  font-size:42px;
+  margin-bottom:12px;
+}
+
+.catering-wrapper .intro{
+  max-width:720px;
+  text-align:center;
+  font-size:15px;
+  margin-bottom:40px;
+}
+
+/* ===== FORM CARD ===== */
+.form-card{
+  background:#fff;
+  width:100%;
+  max-width:620px;
+  padding:40px;
+  border-radius:6px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* ===== FORM GROUP ===== */
+.form-group{
+  margin-bottom:22px;
+}
+
+.form-group label{
+  display:block;
+  font-weight:600;
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid #000;
+  font-size:14px;
+  outline:none;
+}
+
+.form-group textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+/* ===== CHECKBOX TEXT ===== */
+.checkbox-text{
+  font-size:13px;
+  line-height:1.6;
+}
+
+.checkbox-text a{
+  color:#0066cc;
+  text-decoration:none;
+}
+
+/* ===== SUBMIT BUTTON ===== */
+.submit-btn{
+  width:100%;
+  padding:14px;
+  background:#0078d4;
+  color:#fff;
+  border:none;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+.submit-btn:hover{
+  background:#005fa3;
+}
+
+/* ===== SUCCESS MESSAGE ===== */
+.success-msg{
+  display:none;
+  text-align:center;
+  padding:20px;
+  margin-top:20px;
+  background:#e6ffe6;
+  border:1px solid #4caf50;
+  color:#1b5e20;
+  font-size:15px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .form-card{
+    padding:28px;
+  }
+
+  .catering-wrapper h1{
+    font-size:34px;
+  }
+}
+
+  .top-bar {
+            padding: 20px 30px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+</style>
+</head>
+
+<body>
+<div class="top-bar">
+        <a href="index.html" class="back-link">← Back</a>
+    </div>
+  
+<section class="catering-bg">
+   
+  <div class="catering-wrapper">
+
+    <h1>Catering</h1>
+
+    <p class="intro">
+      Please fill out the form below and we'll do our best to accommodate your desired
+      date and any requests you may have to make your party/celebration memorable.
+    </p>
+
+    <!-- ===== FORM ===== -->
+    <form class="form-card" id="cateringForm">
+
+      <div class="form-group">
+        <label>Full Name (required):</label>
+        <input type="text" required placeholder="e.g. Nina Simone">
+      </div>
+
+      <div class="form-group">
+        <label>Phone (required):</label>
+        <input type="tel" required placeholder="e.g. (123) 456-7890">
+      </div>
+
+      <div class="form-group checkbox-text">
+        <input type="checkbox" required>
+        I agree to receive marketing text messages from Salt Water Grill.
+        <br><br>
+        <a href="#">Privacy Policy</a> &nbsp; <a href="#">Terms and Conditions</a>
+        <ul>
+          <li>Message and data rates may apply.</li>
+          <li>Message frequency varies.</li>
+          <li>Reply STOP to cancel, HELP for help.</li>
+        </ul>
+      </div>
+
+      <div class="form-group">
+        <label>Email (required):</label>
+        <input type="email" required placeholder="e.g. cris@example.com">
+      </div>
+
+      <div class="form-group">
+        <label>Company (optional):</label>
+        <input type="text" placeholder="Name of your business...">
+      </div>
+
+      <div class="form-group">
+        <label>Number of People (required):</label>
+        <select required>
+          <option value="">Select</option>
+          <option>10 People</option>
+          <option>20 People</option>
+          <option>30+ People</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Select Date (required):</label>
+        <input type="date" required>
+      </div>
+
+      <div class="form-group">
+        <label>Select Time (required):</label>
+        <select required>
+          <option value="">Select</option>
+          <option>11:00 AM</option>
+          <option>12:00 PM</option>
+          <option>6:00 PM</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Select Occasion (required):</label>
+        <select required>
+          <option value="">Select</option>
+          <option>Birthday</option>
+          <option>Corporate Event</option>
+          <option>Wedding</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Select Type Of Catering Service (required):</label>
+        <select required>
+          <option value="">Select</option>
+          <option>Drop-Off</option>
+          <option>Full Service</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Budget per Person:</label>
+        <input type="text" value="$30">
+      </div>
+
+      <div class="form-group">
+        <label>Description / Requests (optional):</label>
+        <textarea placeholder="Any Special Requests?..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>How did you hear about us? (optional):</label>
+        <select>
+          <option>Google</option>
+          <option>Friends</option>
+          <option>Social Media</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
+
+      <div class="success-msg" id="successMsg">
+        ✅ Thank you! Your catering request has been submitted successfully.
+      </div>
+
+    </form>
+
+  </div>
+</section>
+
+<script>
+/* ===== FORM SUBMIT HANDLER ===== */
+document.getElementById("cateringForm").addEventListener("submit", function(e){
+  e.preventDefault(); // stop page reload
+
+  document.getElementById("successMsg").style.display = "block";
+  this.reset();
+});
+</script>
+
+</body>
+</html>

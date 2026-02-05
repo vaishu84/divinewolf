@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SPORTS BAR & GRILL – About + Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Open Sans", sans-serif;
+            background: #000;
+            padding-top: 130px; /* Added to account for fixed header */
+        }
+
+        /* ================= HEADER ================= */
+        .site-header {
+            background: #000;
+            padding: 18px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            height: 130px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            position: relative;
+        }
+
+        /* LINKS */
+        .nav-left a,
+        .nav-right a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin: 0 12px;
+            transition: color 0.3s;
+            text-transform: uppercase;
+        }
+
+        .nav-left a:hover,
+        .nav-right a:hover {
+            color: #f9cd2f;
+        }
+
+        /* LOGO */
+        .nav-logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .nav-logo a {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-logo img {
+            height: 105px;
+            width: auto;
+            max-width: 200px;
+            display: block;
+        }
+
+        /* SOCIAL ICONS */
+        .nav-social {
+            display: flex;
+            align-items: center;
+            margin-left: 16px;
+            gap: 12px;
+        }
+
+        .nav-social i {
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-social i:hover {
+            color: #f9cd2f;
+        }
+
+        /* TOGGLE BUTTON */
+        .menu-toggle {
+            display: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #fff;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+
+        /* ================= MOBILE MENU ================= */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 260px;
+            height: 100vh;
+            background: #000;
+            padding: 100px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: 0.4s ease;
+            z-index: 999;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: color 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: #f9cd2f;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+            width: 195px;
+            height: auto;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           ABOUT SECTION
+        ===================================================== */
+        .about-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            min-height: 900px;
+            background: #fff;
+        }
+
+        /* TOP LEFT */
+        .about-title {
+            background: #f9cd2f;
+            display: flex;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .about-title h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 48px;
+            letter-spacing: 2px;
+            color: #000;
+        }
+
+        /* TOP RIGHT SLIDER */
+        .about-slider {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* SLIDER CONTROLS */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 42px;
+            color: #fff;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.3);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .arrow.left {
+            left: 20px;
+        }
+
+        .arrow.right {
+            right: 20px;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: #fff;
+        }
+
+        /* BOTTOM LEFT IMAGE */
+        .about-image {
+            background: url("https://static.spotapps.co/website_images/ab_websites/523381_website_v1/about4.jpg") center/cover no-repeat;
+        }
+
+        /* BOTTOM RIGHT TEXT */
+        .about-text {
+            padding: 60px;
+            color: #000;
+            background: #fff;
+        }
+
+        .about-text h2 {
+            font-family: "Playfair Display", serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        /* =====================================================
+           FULL WIDTH MAP WITH CONTACT BAR
+        ===================================================== */
+        .map-full-section {
+            position: relative;
+            width: 100%;
+            background: #fff;
+        }
+
+        #map {
+            width: 100%;
+            height: 420px;
+        }
+
+        /* CONTACT BAR OVER MAP */
+        .map-contact-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            text-align: center;
+            padding: 14px 20px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            z-index: 999;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+        @media (max-width: 1100px) {
+            .nav-left a, .nav-right a {
+                margin: 0 8px;
+                font-size: 13px;
+            }
+            
+            .nav-social {
+                margin-left: 8px;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .about-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .about-title,
+            .about-text {
+                padding: 40px;
+            }
+
+            .about-slider,
+            .about-image {
+                min-height: 300px;
+            }
+
+            #map {
+                height: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 100px;
+            }
+            
+            .site-header {
+                padding: 18px 20px;
+                height: 100px;
+            }
+            
+            .nav-container {
+                justify-content: space-between;
+                margin-top: 0;
+            }
+            
+            .nav-left, .nav-right {
+                display: none;
+            }
+            
+            /* TOGGLE BUTTON ON RIGHT */
+            .menu-toggle {
+                display: block;
+                order: 3;
+                margin-left: auto;
+            }
+            
+            /* NAV-LOGO IN CENTER */
+            .nav-logo {
+                position: static;
+                transform: none;
+                order: 2;
+                margin: 0 auto;
+                text-align: center;
+                flex: 1;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .nav-logo img {
+                height: 70px;
+                width: auto;
+                max-width: 160px;
+            }
+            
+            .nav-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+            
+            .about-title h1 {
+                font-size: 36px;
+            }
+            
+            .about-text {
+                padding: 30px 20px;
+            }
+            
+            .about-text h2 {
+                font-size: 28px;
+            }
+            
+            .arrow {
+                font-size: 32px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-header {
+                padding: 15px;
+                height: 90px;
+            }
+            
+            .nav-logo img {
+                height: 60px;
+                max-width: 140px;
+                margin-left: -148px;
+            }
+            
+            /* Ensure toggle button stays on right */
+            .menu-toggle {
+                order: 3;
+            }
+            
+            .nav-logo {
+                order: 2;
+            }
+            
+            .about-title h1 {
+                font-size: 28px;
+            }
+            
+            .about-title, .about-text {
+                padding: 30px 20px;
+            }
+            
+            .about-text h2 {
+                font-size: 24px;
+            }
+            
+            .mobile-menu {
+                width: 100%;
+            }
+            
+            #map {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <nav class="nav-container">
+            <div class="nav-left">
+                <a href="menu.html">MENU</a>
+                <a href="drink.html">DRINKS</a>
+                <a href="#">SPECIALS</a>
+            </div>
+
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="Untitled design (15).png" alt="Divine Wolf Logo">
+                </a>
+            </div>
+
+            <div class="nav-right">
+                <a href="catering.html">CATERING</a>
+                <a href="hookah.html">HOOKAH</a>
+                <a href="about.html" class="active">ABOUT</a>
+                <div class="nav-social">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-google"></i>
+                </div>
+            </div>
+
+            <button class="menu-toggle" id="toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- ================= MOBILE MENU ================= -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="menu.html">MENU</a>
+        <a href="drink.html">DRINKS</a>
+        <a href="#">SPECIALS</a>
+        <a href="catering.html">CATERING</a>
+        <a href="hookah.html">HOOKAH</a>
+        <a href="about.html" class="active">ABOUT</a>
+    </div>
+
+    <!-- ================= ABOUT SECTION ================= -->
+    <section class="about-wrapper">
+
+        <!-- TOP LEFT -->
+        <div class="about-title">
+            <h1>SPORTS BAR & GRILL</h1>
+        </div>
+
+        <!-- TOP RIGHT SLIDER -->
+        <div class="about-slider">
+            <div class="slide active"
+                style="background-image:url('https://static.spotapps.co/website_images/ab_websites/523381_website_v1/about1.jpg')">
+            </div>
+            <div class="slide"
+                style="background-image:url('https://static.spotapps.co/website_images/ab_websites/523381_website_v1/about2.jpg')">
+            </div>
+            <div class="slide"
+                style="background-image:url('https://static.spotapps.co/website_images/ab_websites/523381_website_v1/about3.jpg')">
+            </div>
+
+            <div class="arrow left">&#10094;</div>
+            <div class="arrow right">&#10095;</div>
+
+            <div class="dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM LEFT -->
+        <div class="about-image"></div>
+
+        <!-- BOTTOM RIGHT -->
+        <div class="about-text">
+            <h2>ABOUT US</h2>
+            <p>
+                At Divine Wolf, dining is more than a meal — it's an experience crafted with purpose, passion, and
+                creativity. Rooted in tradition yet driven by innovation, our kitchen brings together time-honored
+                techniques and modern flavors to create dishes that are bold, memorable, and deeply satisfying.
+            </p>
+            <p>
+                We carefully source high-quality ingredients and transform them into chef-driven creations that
+                celebrate freshness, balance, and flavor. From our signature entrées to thoughtfully curated seasonal
+                specials, every plate is designed to tell a story and awaken your senses.
+            </p>
+            <p>
+                Whether you're joining us for a relaxed lunch, an energetic dinner, or a special celebration with family
+                and friends, Divine Wolf offers an inviting atmosphere paired with warm hospitality and exceptional
+                service. We believe great food has the power to bring people together, create lasting memories, and turn
+                ordinary moments into something extraordinary.
+            </p>
+            <p>
+                At Divine Wolf, we don't just serve food — we craft experiences, ignite cravings, and leave impressions
+                that keep you coming back for more.
+            </p>
+        </div>
+
+    </section>
+
+    <!-- ================= MAP SECTION ================= -->
+    <section class="map-full-section">
+
+        <div id="map"></div>
+
+        <div class="map-contact-bar">
+            Contact us: <strong>+13615422005</strong>
+        </div>
+
+    </section>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        /* ===== ABOUT SLIDER ===== */
+        const slides = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".dot");
+        let slideIndex = 0;
+        let slideInterval;
+
+        function showSlide(i) {
+            slides.forEach(s => s.classList.remove("active"));
+            dots.forEach(d => d.classList.remove("active"));
+            slides[i].classList.add("active");
+            dots[i].classList.add("active");
+            slideIndex = i;
+        }
+
+        function nextSlide() {
+            let nextIndex = (slideIndex + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function prevSlide() {
+            let prevIndex = (slideIndex - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+
+        // Event listeners for arrows
+        document.querySelector(".arrow.right").addEventListener("click", nextSlide);
+        document.querySelector(".arrow.left").addEventListener("click", prevSlide);
+
+        // Event listeners for dots
+        dots.forEach((dot, i) => {
+            dot.addEventListener("click", () => {
+                showSlide(i);
+                resetAutoSlide();
+            });
+        });
+
+        // Auto slide functionality
+        function startAutoSlide() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(slideInterval);
+            startAutoSlide();
+        }
+
+        /* ===== MAP ===== */
+        const pinLocation = [27.7103, -97.4040];
+
+        const map = L.map('map').setView(pinLocation, 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker(pinLocation).addTo(map)
+            .bindPopup('<b>Divine Wolf Sports Bar & Grill</b>')
+            .openPopup();
+
+        // ================= MOBILE MENU =================
+        const toggle = document.getElementById("toggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeMenu = document.getElementById("closeMenu");
+
+        toggle.addEventListener("click", () => {
+            mobileMenu.classList.add("active");
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+
+        closeMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !toggle.contains(e.target) && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ================= INITIALIZE =================
+        // Start auto slider
+        startAutoSlide();
+
+        // Pause slider on hover
+        const slider = document.querySelector('.about-slider');
+        if (slider) {
+            slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            slider.addEventListener('mouseleave', startAutoSlide);
+        }
+    </script>
+
+</body>
+
+</html>

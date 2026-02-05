@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Careers – Salt Water Grill</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Open+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Open Sans", sans-serif;
+            background: #fff;
+            color: #000;
+        }
+
+        /* ===== BACK LINK ===== */
+        .top-bar {
+            padding: 20px 30px;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* ===== LOGO ===== */
+        .logo-wrap {
+            text-align: center;
+            margin: 10px 0 20px;
+        }
+
+        .logo-wrap img {
+            height: 70px;
+        }
+
+        /* ===== HEADER ===== */
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: 15px;
+            font-weight: 700;
+            /* BOLD sentence */
+        }
+
+        /* ===== FORM CONTAINER ===== */
+        .form-wrapper {
+            max-width: 720px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+
+        /* ===== FORM GROUP ===== */
+        .form-group {
+            margin-bottom: 26px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #000;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        /* ===== MARKETING TEXT ===== */
+        .checkbox-text {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .checkbox-text input {
+            margin-right: 8px;
+        }
+
+        .checkbox-text a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-text ul {
+            margin: 10px 0 0 20px;
+        }
+
+        /* ===== APPLYING FOR SECTION ===== */
+        .jobs-section {
+            margin-top: 10px;
+        }
+
+        .jobs-section label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .jobs-section input {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== RESUME ROW ===== */
+        .resume-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .upload-btn {
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* ===== SUBMIT ===== */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #0078d4;
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #005fa3;
+        }
+
+        /* ===== SUCCESS ===== */
+        .success-msg {
+            display: none;
+            margin-top: 20px;
+            padding: 14px;
+            background: #e6ffe6;
+            border: 1px solid #4caf50;
+            color: #1b5e20;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #2c2c38;
+            color: #fff;
+            text-align: center;
+            padding: 18px;
+            font-size: 14px;
+        }
+
+        .footer span {
+            color: #ff8c00;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:600px) {
+            .page-title h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACK -->
+    <div class="top-bar">
+        <a href="index.html" class="back-link">← Back</a>
+    </div>
+
+    <!-- LOGO -->
+    <div class="logo-wrap">
+        <img src="Untitled design (15).png" alt="DIVINE Grill">
+    </div>
+
+    <!-- TITLE -->
+    <div class="page-title">
+        <h1>Careers</h1>
+        <p>
+            We are not hiring at this moment, however feel free to leave an application below for us to review at a
+            later date.
+        </p>
+    </div>
+
+    <!-- FORM -->
+    <form class="form-wrapper" id="careerForm">
+
+        <div class="form-group">
+            <label>Name (required):</label>
+            <input type="text" placeholder="e.g. Nina Simone" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone (required):</label>
+            <input type="tel" placeholder="e.g. (123) 456-7890" required>
+        </div>
+
+        <div class="form-group agreement-section">
+
+            <div class="agreement-row">
+                <input type="checkbox" required>
+                <p>
+                    <strong>
+                        I agree to receive marketing text messages from Salt Water Grill about
+                        specials, events, and other exclusive offers.
+                    </strong><br>
+                    My consent to receive these messages is not required to make a reservation
+                    or use the services provided.
+                </p>
+            </div>
+
+            <div class="agreement-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms and Conditions</a>
+            </div>
+
+            <ul class="agreement-list">
+                <li>Message and data rates may apply.</li>
+                <li>Message frequency varies.</li>
+                <li>Reply STOP to cancel, HELP for help.</li>
+            </ul>
+
+        </div>
+
+
+        <div class="form-group">
+            <label>Email (required):</label>
+            <input type="email" placeholder="e.g. cris@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Experience (required):</label>
+            <input type="text" placeholder="e.g. 3 years serving" required>
+        </div>
+
+        <div class="form-group">
+            <label>Applying For:</label>
+            <div class="jobs-section">
+                <label><input type="checkbox"> Bartender</label>
+                <label><input type="checkbox"> Dishwasher</label>
+                <label><input type="checkbox"> Host/Hostess</label>
+                <label><input type="checkbox"> Line Cook</label>
+                <label><input type="checkbox"> Prep Cook</label>
+                <label><input type="checkbox"> Server</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Cover Letter (optional):</label>
+            <textarea placeholder="Write a short comment about your skills and experience..."></textarea>
+        </div>
+
+        <div class="form-group resume-row">
+            <label>Resume (optional):</label>
+            <button type="button" class="upload-btn">Upload Resume</button>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+
+        <div class="success-msg" id="successMsg">
+            ✅ Your application has been submitted successfully!
+        </div>
+
+    </form>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        Careers powered by <span>spot</span>hopper
+    </div>
+
+    <script>
+        document.getElementById("careerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.getElementById("successMsg").style.display = "block";
+            this.reset();
+        });
+    </script>
+
+</body>
+
+</html>

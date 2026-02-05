@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Saltwater Grill Header Clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@500;600&family=Open+Sans:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #d8caca;
+            color: #fff;
+            overflow-x: hidden;
+            padding-top: 130px; /* Space for fixed header */
+        }
+
+        /* ================= HEADER ================= */
+        .site-header {
+            background: #000;
+            padding: 18px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            height: 130px;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* LINKS */
+        .nav-left a,
+        .nav-right a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin: 0 12px;
+            transition: opacity 0.3s;
+        }
+
+        .nav-left a:hover,
+        .nav-right a:hover {
+            opacity: 0.8;
+        }
+
+        /* LOGO */
+        .nav-logo {
+            font-size: 28px;
+            white-space: nowrap;
+            color: #fff;
+            text-align: center;
+        }
+
+        .nav-logo span {
+            font-style: italic;
+        }
+
+        /* SOCIAL ICONS */
+        .nav-social {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 16px;
+            gap: 12px;
+        }
+
+        .nav-social i {
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .nav-social i:hover {
+            opacity: 0.8;
+        }
+
+        /* TOGGLE BUTTON */
+        .menu-toggle {
+            display: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #fff;
+            background: none;
+            border: none;
+        }
+
+        /* ================= MOBILE MENU ================= */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 260px;
+            height: 100vh;
+            background: #000;
+            padding: 100px 30px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: 0.4s ease;
+            z-index: 999;
+        }
+
+        .mobile-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a:hover {
+            color: #d2a55f;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ================= HERO ================= */
+        .hero {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .hero video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= ANIMATED CONTENT SECTION ================= */
+        .hero-container {
+            background-color: #1a528d;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .content-wrapper {
+            max-width: 900px;
+        }
+
+        .main-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 400;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .tagline {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s ease-out;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s ease-out;
+            transition-delay: 0.2s;
+        }
+
+        .cta-button {
+            background-color: #ffcc33;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 1s ease, background-color 0.3s ease;
+            transition-delay: 0.5s;
+        }
+
+        .cta-button:hover {
+            background-color: #e6b82e;
+        }
+
+        .hero-container.is-visible .main-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-container.is-visible .tagline,
+        .hero-container.is-visible .description {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .hero-container.is-visible .cta-button {
+            opacity: 1;
+        }
+
+        /* ================= FUSION SECTION ================= */
+        .fusion-section {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            align-items: center;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        /* LEFT CONTENT */
+        .fusion-content {
+            padding: 80px;
+            color: #000;
+        }
+
+        .fusion-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .fusion-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 28px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .fusion-content p {
+            font-size: 16px;
+            line-height: 1.7;
+            max-width: 520px;
+            margin-bottom: 40px;
+        }
+
+        .fusion-content .btn {
+            display: inline-block;
+            padding: 14px 38px;
+            background: #000;
+            color: #d2a55f;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .fusion-content .btn:hover {
+            background-color: #333;
+        }
+
+        /* RIGHT IMAGE */
+        .fusion-image {
+            height: 100%;
+        }
+
+        .fusion-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= SCROLL ANIMATION ================= */
+        .animate-left {
+            opacity: 0;
+            transform: translateX(-120px);
+            transition: all 1s ease;
+            color: black;
+        }
+
+        .animate-left.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ================= GALLERY SECTION ================= */
+        .gallery-section {
+            min-height: 100vh;
+            padding: 80px 60px;
+            background:
+                radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(0,0,0,0.85));
+        }
+
+        /* GRID */
+        .gallery-grid {
+            max-width: 1400px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        /* IMAGE CARD */
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.06);
+        }
+
+        /* ================= CATERING SECTION ================= */
+        .catering-scroll-section {
+            min-height: 60vh;
+            background: #FFD233;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .catering-scroll-content {
+            max-width: 900px;
+        }
+
+        .catering-scroll-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: 1s ease;
+        }
+
+        .catering-scroll-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 28px;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: 1s ease 0.15s;
+        }
+
+        .catering-scroll-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 820px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: 1s ease 0.3s;
+        }
+
+        .catering-scroll-btn {
+            display: inline-block;
+            background: #000;
+            color: #FFD233;
+            padding: 14px 60px;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(80px);
+            transition: 1s ease 0.45s;
+        }
+
+        .catering-scroll-btn:hover {
+            background: #333;
+        }
+
+        .catering-scroll-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= REVIEWS SECTION ================= */
+        .reviews {
+            background: #f7f6f4;
+            padding: 120px 20px 140px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .reviews h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 56px;
+            margin-bottom: 30px;
+            color: #000;
+        }
+
+        /* SLIDER WRAPPER */
+        .slider-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            padding: 0 40px;
+            color: #000;
+        }
+
+        /* Slide content */
+        .source {
+            font-family: "Great Vibes", cursive;
+            font-size: 34px;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .reviewer {
+            font-size: 18px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .stars {
+            color: #9c6b3c;
+            letter-spacing: 2px;
+            font-size: 20px;
+        }
+
+        .review-text {
+            font-size: 19px;
+            line-height: 1.8;
+            color: #444;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* Quotes Styling */
+        .quote-icon {
+            position: absolute;
+            font-size: 80px;
+            color: #c00000;
+            opacity: 0.15;
+            font-family: serif;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .quote-left {
+            left: 55px;
+            top: 95px;
+        }
+
+        .quote-right {
+            right: 47px;
+            bottom: -29px;
+        }
+
+        /* ARROWS */
+        .arrow {
+            background: none;
+            border: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #bbb;
+            padding: 15px;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .arrow:hover {
+            color: #c00000;
+            transform: scale(1.2);
+        }
+
+        /* DOTS */
+        .dots {
+            margin-top: 50px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #000;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active {
+            background: #000;
+            transform: scale(1.3);
+        }
+
+        /* Controls Section */
+        .controls {
+            margin-top: 40px;
+        }
+
+        .pause {
+            background: none;
+            border: 1px solid #ddd;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pause:hover {
+            background: #eee;
+        }
+
+        /* ================= JOIN OUR TEAM SECTION ================= */
+        .join-team {
+            background: #f9cd2f;
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .join-team h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 64px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            color: #000;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.8s ease;
+        }
+
+        .join-team .tagline {
+            font-family: "Great Vibes", cursive;
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #000;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.9s ease;
+        }
+
+        .join-team p {
+            max-width: 900px;
+            margin: 0 auto 50px;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #000;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 1s ease;
+        }
+
+        .apply-btn {
+            background: #000;
+            color: #cfa44a;
+            border: 2px solid #000;
+            padding: 16px 52px;
+            font-size: 16px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s ease;
+        }
+
+        .apply-btn:hover {
+            background: #c00000;
+            color: #000;
+            border: 2px solid #000;
+            box-shadow: 0 0 18px rgba(0,0,0,0.4);
+        }
+
+        .join-team.active h1,
+        .join-team.active .tagline,
+        .join-team.active p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ================= NEWSLETTER + MAP SECTION ================= */
+        .top-yellow {
+            height: 18px;
+            background: #f1c232;
+        }
+
+        .top-red {
+            height: 8px;
+            background: #c00000;
+        }
+
+        .newsletter-section {
+            display: flex;
+            min-height: 520px;
+            background: #fff;
+            color: #000;
+        }
+
+        .newsletter-left {
+            flex: 1;
+            padding: 80px 70px;
+        }
+
+        .newsletter-left h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 54px;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        .newsletter-left p {
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-row input {
+            border: none;
+            border-bottom: 2px solid #000;
+            width: 320px;
+            font-size: 16px;
+            padding: 8px 0;
+            outline: none;
+            background: transparent;
+        }
+
+        .form-row button {
+            background: #000;
+            color: #cfa44a;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-row button:hover {
+            background: #333;
+        }
+
+        .newsletter-right {
+            flex: 1;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            min-height: 520px;
+        }
+
+        /* ================= FOOTER ================= */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            background: #1f5a91;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+
+        .box {
+            padding: 70px 60px;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            color: #fff;
+        }
+
+        .footer-grid .box:nth-child(2),
+        .footer-grid .box:nth-child(4) {
+            border-right: none;
+        }
+
+        .footer-grid .box:nth-child(3),
+        .footer-grid .box:nth-child(4) {
+            border-bottom: none;
+        }
+
+        .box h3 {
+            font-family: "Playfair Display", serif;
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .box p {
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .phone {
+            font-size: 18px;
+        }
+
+        .social-icons i {
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .social-icons i:hover {
+            opacity: 0.8;
+        }
+
+        /* ================= POWERED BY ================= */
+        .powered {
+            background: #000;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .powered span {
+            color: orange;
+        }
+
+        .powered a {
+            display: block;
+            margin-top: 10px;
+            color: #fff;
+            text-decoration: underline;
+            font-size: 13px;
+        }
+
+        /* ================= CHAT ICON ================= */
+        .chat-icon {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        .chat-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 1024px) {
+            .nav-container {
+                padding: 0 20px;
+            }
+            
+            .fusion-content h1 {
+                font-size: 48px;
+            }
+            
+            .fusion-content h3 {
+                font-size: 24px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 25px;
+            }
+            
+            .catering-scroll-title {
+                font-size: 56px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav-left,
+            .nav-right {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero {
+                height: 80vh;
+            }
+
+            .hero video {
+                height: 80vh;
+            }
+
+            .fusion-section {
+                grid-template-columns: 1fr;
+            }
+
+            .fusion-image {
+                order: -1;
+                height: 400px;
+            }
+
+            .fusion-content {
+                padding: 50px 30px;
+                text-align: center;
+            }
+
+            .fusion-content h1 {
+                font-size: 44px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .newsletter-section {
+                flex-direction: column;
+            }
+
+            .newsletter-left {
+                padding: 60px 30px;
+            }
+
+            .form-row input {
+                width: 100%;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .box {
+                border-right: none;
+                padding: 40px 30px;
+            }
+
+            .footer-grid .box:nth-child(3) {
+                border-bottom: 2px solid #fff;
+            }
+
+            .reviews h1 {
+                font-size: 40px;
+            }
+
+            .arrow {
+                display: none;
+            }
+
+            .slide {
+                padding: 0 20px;
+            }
+
+            .quote-left {
+                left: 10px;
+                top: 40px;
+                font-size: 50px;
+            }
+
+            .quote-right {
+                right: 10px;
+                bottom: -10px;
+                font-size: 50px;
+            }
+
+            .join-team h1 {
+                font-size: 42px;
+            }
+
+            .join-team .tagline {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 18px 20px;
+                height: 100px;
+            }
+
+            .nav-container {
+                margin-top: 15px;
+            }
+
+            .nav-logo {
+                font-size: 22px;
+            }
+
+            .catering-scroll-title {
+                font-size: 48px;
+            }
+
+            .catering-scroll-subtitle {
+                font-size: 22px;
+            }
+
+            .catering-scroll-text {
+                font-size: 16px;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.5rem;
+            }
+
+            .description {
+                font-size: 1rem;
+            }
+
+            .gallery-section {
+                padding: 60px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-section {
+                padding: 40px 20px;
+            }
+
+            .newsletter-left h1 {
+                font-size: 36px;
+            }
+
+            .box {
+                padding: 30px 20px;
+            }
+
+            .catering-scroll-title {
+                font-size: 36px;
+            }
+
+            .catering-scroll-btn {
+                padding: 12px 40px;
+            }
+
+            .hero-container {
+                padding: 60px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ================= HEADER ================= -->
+    <header class="site-header">
+        <nav class="nav-container">
+            <button class="menu-toggle" id="toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="nav-left">
+                <a href="#">MENU</a>
+                <a href="#">DRINKS</a>
+                <a href="#">SPECIALS</a>
+            </div>
+
+            <div class="nav-logo">
+                SaltWater <span>Grill</span>
+            </div>
+
+            <div class="nav-right">
+                <a href="#">CATERING</a>
+                <a href="#">JOBS</a>
+                <a href="#">ABOUT</a>
+                <div class="nav-social">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-google"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================= MOBILE MENU ================= -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-menu" id="closeMenu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#">MENU</a>
+        <a href="#">DRINKS</a>
+        <a href="#">SPECIALS</a>
+        <a href="#">CATERING</a>
+        <a href="#">JOBS</a>
+        <a href="#">ABOUT</a>
+    </div>
+
+    <!-- ================= HERO VIDEO ================= -->
+    <section class="hero">
+        <video id="heroVideo" autoplay muted playsinline loop>
+            <source src="Salt_Water_Grill_Video_Vimeo720p30.mp4" type="video/mp4">
+        </video>
+    </section>
+
+    <!-- ================= ANIMATED CONTENT ================= -->
+    <div class="hero-container">
+        <div class="content-wrapper">
+            <h1 class="main-title">STEP INTO FLAVOR</h1>
+            <p class="tagline">Salt in the air, spice on the plate.</p>
+            <p class="description">
+                Saltwater Grill is the place for Corpus Christi's freshest seafood, and boasts the best saltwater fish dishes you can find in the region! Enjoy chef-inspired dishes and delicious rotating daily specials - all at a reasonable price!
+            </p>
+            <button class="cta-button">READ MORE</button>
+        </div>
+    </div>
+
+    <!-- ================= FUSION SECTION ================= -->
+    <section class="fusion-section">
+        <div class="fusion-content">
+            <h1 class="animate-left">SAVOR THE FUSION</h1>
+            <h3 class="animate-left" style="transition-delay:.15s">
+                Experience Flavor Like Never Before
+            </h3>
+            <p class="animate-left" style="transition-delay:.3s">
+                From chef-inspired feature dishes to a wide variety of menu selections,
+                Saltwater Grill offers something for everyone. Whether you're craving wraps,
+                fried shrimp, oysters, or our signature seafood specialties, our menu is
+                designed to satisfy. Explore our daily offerings and discover why we're the
+                top choice for quality seafood in Corpus Christi.
+            </p>
+            <a href="#" class="btn animate-left" style="transition-delay:.45s">
+                MENU
+            </a>
+        </div>
+        <div class="fusion-image">
+            <img src="https://images.unsplash.com/photo-1559847844-5315695dadae" alt="Food Dish">
+        </div>
+    </section>
+
+    <!-- ================= GALLERY SECTION ================= -->
+    <section class="gallery-section">
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1559847844-5315695dadae" alt="Seafood dish">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947" alt="Restaurant interior">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" alt="Grilled fish">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092" alt="Seafood platter">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd" alt="Salad bowl">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe" alt="Vegetable dish">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1553621042-f6e147245754" alt="Cooking ingredients">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141" alt="Chef preparing food">
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CATERING SECTION ================= -->
+    <section class="catering-scroll-section">
+        <div class="catering-scroll-content">
+            <h1 class="catering-scroll-title">CATERING</h1>
+            <h3 class="catering-scroll-subtitle">
+                Elevate Your Event with Inspired Catering
+            </h3>
+            <p class="catering-scroll-text">
+                Our catering delivers thoughtfully prepared dishes designed to impress your guests.
+                Whether it's an intimate gathering or a large celebration, we create custom menus
+                with fresh, high-quality ingredients to make every moment special and memorable.
+            </p>
+            <a href="#" class="catering-scroll-btn">CATERING</a>
+        </div>
+    </section>
+    
+    <div class="top-red"></div>
+
+    <!-- ================= REVIEWS SECTION ================= -->
+    <section class="reviews">
+        <h1>REVIEWS</h1>
+        <div class="slider-wrapper">
+            <button class="arrow" onclick="manualPrev()"><i class="fas fa-chevron-left"></i></button>
+            <div class="slider">
+                <div class="quote-icon quote-left">"</div>
+                <div class="slides" id="slides">
+                    <div class="slide">
+                        <div class="source">Review by – Google</div>
+                        <div class="reviewer">Chris B: <span class="stars">★★★★★</span></div>
+                        <div class="review-text">
+                            Truly delicious quality of food. Very fresh cooked very well. The staff is very friendly and educational. 
+                            The attention to detail in the kitchen is unmatched in the region.
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="source">Review by – Google</div>
+                        <div class="reviewer">Jenn R: <span class="stars">★★★★★</span></div>
+                        <div class="review-text">
+                            Cannot say enough great things about this establishment. The food was AMAZING.
+                            Oysters were fresh and delicious. We will 100% be back and recommend.
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <div class="source">Review by – Google</div>
+                        <div class="reviewer">Ashley: <span class="stars">★★★★★</span></div>
+                        <div class="review-text">
+                            Got the oysters Rockefeller for the appetizer and they were amazing as always.
+                            Shrimp and scallop Cajun pasta was very yummy. Solid restaurant.
+                        </div>
+                    </div>
+                </div>
+                <div class="quote-icon quote-right">"</div>
+            </div>
+            <button class="arrow" onclick="manualNext()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="dots" id="dots"></div>
+        <div class="controls">
+            <button class="pause" id="pauseBtn" onclick="toggleAutoPlay()">⏸</button>
+        </div>
+    </section>
+
+    <!-- ================= JOIN OUR TEAM ================= -->
+    <section class="join-team" id="joinTeam">
+        <h1>JOIN OUR TEAM</h1>
+        <div class="tagline">Be Part of Something Delicious</div>
+        <p>
+            We're looking for passionate individuals who love great food and exceptional
+            service. If you're eager to grow, collaborate, and create memorable
+            experiences, we want to hear from you.
+        </p>
+        <a href="JOBS.html"><button class="apply-btn">APPLY</button></a>
+    </section>
+
+    <!-- ================= NEWSLETTER + MAP ================= -->
+    <div class="top-yellow"></div>
+    <section class="newsletter-section">
+        <div class="newsletter-left">
+            <h1>STAY IN THE<br>LOOP WITH SALT<br>WATER GRILL</h1>
+            <p>Sign up for our newsletter & get exclusive offers and invites!</p>
+            <div class="form-group">
+                <label>Email (required)</label>
+                <div class="form-row">
+                    <input type="email" placeholder="e.g. email@example.com">
+                    <button>SUBMIT</button>
+                </div>
+            </div>
+        </div>
+        <div class="newsletter-right">
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER GRID ================= -->
+    <section class="footer-grid">
+        <div class="box">
+            <h3>LOCATION</h3>
+            <p>2401 Cimarron Blvd<br>Corpus Christi, TX 78414</p>
+        </div>
+        <div class="box">
+            <h3>FIND US ON</h3>
+            <div class="social-icons">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-google"></i>
+            </div>
+        </div>
+        <div class="box">
+            <h3>HOURS</h3>
+            <p>Monday Closed<br>Tuesday–Sunday 11am–10pm</p>
+        </div>
+        <div class="box">
+            <h3>CONTACT US</h3>
+            <p class="phone">(361)-993-7258</p>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="powered">
+        <p>Powered by: <strong><span>spot</span>hopper</strong></p>
+        <a>Website design, Social Media marketing and Email marketing provided by SpotHopper.</a>
+    </footer>
+
+    <!-- ================= CHAT ICON ================= -->
+    <div class="chat-icon">💬</div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ================= MOBILE MENU =================
+        const toggle = document.getElementById("toggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const closeMenu = document.getElementById("closeMenu");
+
+        toggle.addEventListener("click", () => {
+            mobileMenu.classList.add("active");
+        });
+
+        closeMenu.addEventListener("click", () => {
+            mobileMenu.classList.remove("active");
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !toggle.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // ================= HERO ANIMATION =================
+        const heroObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const heroSection = document.querySelector('.hero-container');
+        if (heroSection) heroObserver.observe(heroSection);
+
+        // ================= SCROLL ANIMATIONS =================
+        // Fusion section animation
+        const animateElements = document.querySelectorAll('.animate-left');
+        const fusionObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        animateElements.forEach(el => fusionObserver.observe(el));
+
+        // Catering section animation
+        const cateringObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const elements = entry.target.querySelectorAll('[class*="catering-scroll"]');
+                    elements.forEach(el => el.classList.add('catering-scroll-show'));
+                }
+            });
+        }, { threshold: 0.4 });
+
+        const cateringSection = document.querySelector('.catering-scroll-section');
+        if (cateringSection) cateringObserver.observe(cateringSection);
+
+        // Join team animation
+        const joinTeamObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("active");
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const joinTeamSection = document.getElementById("joinTeam");
+        if (joinTeamSection) joinTeamObserver.observe(joinTeamSection);
+
+        // ================= REVIEW SLIDER =================
+        const slides = document.getElementById("slides");
+        const dotsBox = document.getElementById("dots");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const slideElements = document.querySelectorAll(".slide");
+        const total = slideElements.length;
+        const reviewsSection = document.querySelector('.reviews');
+
+        let index = 0;
+        let playing = false;
+        let timer;
+        let autoPlayEnabled = true;
+
+        // Create dots
+        slideElements.forEach((_, i) => {
+            const d = document.createElement("span");
+            d.className = "dot" + (i === 0 ? " active" : "");
+            d.onclick = () => {
+                index = i;
+                update();
+                if (autoPlayEnabled) resetTimer();
+            };
+            dotsBox.appendChild(d);
+        });
+        const dots = document.querySelectorAll(".dot");
+
+        function update() {
+            if (total === 0) {
+                slides.style.transform = `translateX(0%)`;
+                dotsBox.innerHTML = '';
+                return;
+            }
+
+            index = (index % total + total) % total;
+            slides.style.transform = `translateX(-${index * 100}%)`;
+            
+            dots.forEach((d, i) => {
+                d.classList.remove("active");
+                if (i === index) {
+                    d.classList.add("active");
+                }
+            });
+        }
+
+        function next() {
+            index = (index + 1) % total;
+            update();
+        }
+
+        function prev() {
+            index = (index - 1 + total) % total;
+            update();
+        }
+
+        function startAutoPlay() {
+            if (autoPlayEnabled && !playing) {
+                playing = true;
+                pauseBtn.innerHTML = "⏸";
+                timer = setInterval(next, 5000);
+            }
+        }
+
+        function stopAutoPlay() {
+            if (playing) {
+                playing = false;
+                pauseBtn.innerHTML = "▶";
+                clearInterval(timer);
+            }
+        }
+
+        function resetTimer() {
+            if (autoPlayEnabled && playing) {
+                clearInterval(timer);
+                timer = setInterval(next, 5000);
+            }
+        }
+
+        function manualNext() {
+            next();
+            if (autoPlayEnabled) resetTimer();
+        }
+
+        function manualPrev() {
+            prev();
+            if (autoPlayEnabled) resetTimer();
+        }
+
+        function toggleAutoPlay() {
+            if (autoPlayEnabled) {
+                if (playing) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+            }
+        }
+
+        // Auto-play based on visibility
+        const sliderObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (autoPlayEnabled) startAutoPlay();
+                } else {
+                    stopAutoPlay();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (reviewsSection) {
+            sliderObserver.observe(reviewsSection);
+        }
+
+        // Initialize slider
+        update();
+
+        // ================= MAP =================
+        function initMap() {
+            const pin = [27.7103, -97.4040];
+            const map = L.map('map', { 
+                center: pin, 
+                zoom: 14,
+                dragging: false,
+                scrollWheelZoom: false,
+                touchZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                zoomControl: false
+            });
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            L.marker(pin).addTo(map);
+        }
+
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+</body>
+</html>
